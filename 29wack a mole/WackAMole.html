@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stile.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1>Acchiappa il Doge</h1>
+    </header>
+    <main>
+        <div class="container">
+            <div class="talpe">
+                <div class="buca">
+                    
+                    <div class="talpa1">
+                        <img src="basket.png" id="basket1" alt="">
+                        <img src="doge.png" alt="">
+                    </div>
+                </div>
+                <div class="buca">
+                    
+                    <div class="talpa2">
+                        <img src="basket.png" alt="">
+                        <img src="doge.png" alt="">
+
+                    </div>
+                </div>
+                <div class="buca">
+                    
+                    <div class="talpa3">
+                        <img src="basket.png"  alt="">
+                        <img src="doge.png" alt="">
+                    </div>
+                </div>
+                <div class="buca">
+                    
+                    <div class="talpa4">
+                        <img src="basket.png" alt="">
+                        <img src="doge.png" alt="">
+                    </div>
+                </div>
+                <div class="buca">
+                    
+                    <div class="talpa">
+                        <img src="basket.png" alt="">
+                        <img src="doge.png" alt="">
+                    </div>
+                </div>
+                <div class="buca">
+                    
+                    <div class="talpa">
+                        <img src="basket.png" alt="">
+                        <img src="doge.png" alt="">
+                    </div>
+                </div>
+                <div class="buca">
+                    
+                    <div class="talpa">
+                        <img src="basket.png" alt="">
+                        <img src="doge.png" alt="">
+                    </div>
+                </div>
+                <div class="buca">
+                    
+                    <div class="talpa">
+                        <img src="basket.png" alt="">
+                        <img src="doge.png" alt="">
+                    </div>
+                </div>
+                <div class="buca">
+                    
+                    <div class="talpa">
+                        <img src="basket.png" alt="">
+                        <img src="doge.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="menu">
+                <button class="play">Play</button>
+                <label for="punti">punteggio: <input type="text" id="punti" class="punti"></label>
+                <div class="menuDifficolta">
+
+                    <label for="easy"><input type="radio" name="easy" id="easy">Easy</label>
+                    <label for="medium"><input type="radio" name="medium" id="medium">Medium</label>
+                    <label for="Hard"><input type="radio" name="hard" id="hard">Hard</label>
+
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+<script>
+
+  
+
+
+  let rand=0;
+  let partita=false;
+  let points = 0 ; 
+  let timeouts= [];
+
+  
+  const doges = document.querySelectorAll('img[src^="doge"]');
+  const playbtn = document.querySelector('.play');
+  const punteggio = document.querySelector('.punti');
+
+  
+
+
+  function iniziaPartita(){
+      points=0;
+      clearTimeout(timeouts);
+      punteggio.value ="0";
+      partita= true;
+      doges.forEach(doge=>{doge.style.top="56px"});
+      giocoPartita();
+      mostraDoge();
+
+
+     
+  }
+  
+  function giocoPartita() {
+    
+   timeouts.push(setTimeout(() => { partita=false;console.log("finisce  la partita")}, 7000));
+
+
+  }
+
+  function mostraDoge(){
+       
+       if(!partita){
+           console.log("partita finita");
+           return
+       }
+        let dogenumber =generanumero();
+       doges[dogenumber].style.top="-80px";
+       
+       let randomtime  = generanumero(500,900);
+       
+       timeouts.push(setTimeout(()=>{if(partita){doges[dogenumber].style.top="52px"; mostraDoge()}},randomtime));
+
+       
+       
+     
+  }
+
+ 
+  function generanumero(min=0, max=9){
+  let rand1=Math.floor(Math.random() * (max - min) + min);
+  
+   if(rand1!=rand){
+       rand=rand1;
+    return rand1;
+   }
+   else 
+     return  generanumero(min,max);
+   
+ }
+
+ function dogeColpito() {
+     if(!partita){
+         return;
+     }
+
+     points+=1;
+     console.log('dogecolpito');
+     
+     punteggio.value = `${points}`;
+   
+
+ }
+
+
+ playbtn.addEventListener('click',iniziaPartita);
+
+ doges.forEach(doge=>{doge.addEventListener('click',dogeColpito)});
+
+
+
+ function svuotaTimeout(timeouts){
+    for (var i=0; i<timeouts.length; i++) {
+  clearTimeout(timeouts[i]);
+}
+   timeouts.length=0;
+ }
+
+
+
+ 
+
+</script>
+</html>

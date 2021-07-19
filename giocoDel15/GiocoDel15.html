@@ -1,0 +1,546 @@
+<!doctype html>
+<html> 
+
+<head>  
+
+<script>
+ 
+ const constraintX=3 ;
+ const constraintY=3 ;
+ 
+ //qui creo un ogetto che mi definisce la posizione nella tabella
+ class Box {  
+  constructor(x, y) {  
+    this.x = x;  
+    this.y = y;  
+  }  
+ /*
+  --------------------------> X
+  | (x,y)| (1,0) |      |     |
+  |-------------------------
+  | (0,1)| (1,1) |(2,1) | 
+  |--------------------------
+  | (0,2)| (1,2) |       
+  |---------------------------
+  |
+  v 
+  Y
+  
+  questo è l'orientamento della scatola a me interessa sapere in ogni momento la posizione di ogni numero 
+  e posso ottenere le coordinate usando i seguenti 4 metodi che chiamero
+  Quad in alto
+  Quad in basso
+  Quad a destra 
+  Quad a sinistra
+  
+ */
+ 
+  BoxAlto(){
+   if(this.y===0){
+    return null;
+   }
+   else
+   return new Box(this.x,this.y-1);
+ }
+  BoxBasso(){
+   if(this.y===constraintY){
+    return null;
+   }
+   else
+   return new Box(this.x,this.y+1);
+ }
+  BoxSinistra(){
+   if(this.x===0){
+    return null;
+   }
+   else
+   return new Box(this.x-1,this.y);
+ }
+  BoxDestra(){
+   if(this.x===constraintX){
+    return null;
+   }
+   else
+   return new Box(this.x+1,this.y);
+ }
+ 
+ //questa funzione restituisce un array con le posizioni nel seguente ordine alto, basso, sinistra, destra
+ posizioneBoxVicini(){
+ return [ 
+          this.BoxAlto(),
+		  this.BoxBasso(),
+		  this.BoxSinistra(),
+		  this.BoxDestra()
+		 ].filter(box=>box!==null); //restituisce un array con le posizioni dei box 
+ 
+ }
+ 
+ 
+ //per generare un numero random da 0 a 3 si usa :
+ // Math.floor(Math.random()*3);
+ 
+ /*
+    questa è la funzione che è presente sul metodo per generare il box random che sta vicino prende un box nel array restituito 
+	da getnextdoorboxes e ne prende un elemento che sta dentr, 
+    getRandomNextdoorBox() {  
+    const nextdoorBoxes = this.getNextdoorBoxes();  
+    return nextdoorBoxes[Math.floor(Math.random() * nextdoorBoxes.length)];  
+	
+
+  }
+ */
+ //Random() restituisce un numero compreso fra 0 e 1 escluso;
+   BoxRandomVicino() {  
+    const boxes = this.posizioneBoxVicini();  
+    return boxes[Math.floor(Math.random() * boxes.length)];  
+  }  
+ 
+ }
+ 
+ //metodo per scambiare i box , gli passa una matrice, e due box che hanno coordinate x e y 
+ 
+ /*
+   la mia matrice ha le coordinate disposte (x,y) il tutorial le dispone come (y,x)
+   
+ */
+ 
+ 
+ function scambiaScatole(matrice,box1,box2){
+ 
+ const temp= matrice[box1.y][box1.x];
+ matrice[box1.y][box1.x]=matrice[box2.y][box2.x];
+ matrice[box2.y][box2.x]=temp;
+ 
+ 
+ }
+ 
+ //controlla solo se è vero 
+ 
+ function controllaRisultato(matrice) {  
+  return (  
+    matrice[0][0] === 1 &&  
+    matrice[1][0] === 2 &&  
+    matrice[2][0] === 3 &&  
+    matrice[3][0] === 4 &&  
+    matrice[0][1] === 5 &&  
+    matrice[1][1] === 6 &&  
+    matrice[2][1] === 7 &&  
+    matrice[3][1] === 8 &&  
+    matrice[0][2] === 9 &&  
+    matrice[1][2] === 10 &&  
+    matrice[2][2] === 11 &&  
+    matrice[3][2] === 12 &&  
+    matrice[0][3] === 13 &&  
+    matrice[1][3] === 14 &&  
+    matrice[2][3] === 15 &&  
+    matrice[3][3] === 0  
+  );  
+};  
+ 
+ //questa funzione restituisce un grid a cui è stato fatto lo shuffle /sto usando il metodo che dice ma secondo me c'è un metodo migliore per farlo
+ function mischiaMatrice(){
+ 
+ let matrice = [[1,2,3,4],
+                [5,6,7,8],
+				[9,10,11,12],
+				[13,14,15,0]];
+				
+let boxvuoto= new Box(3,3);
+
+for(let i=0;i<200;i++){
+
+const randomBox= boxvuoto.BoxRandomVicino();
+scambiaScatole(matrice,randomBox,boxvuoto); 
+boxvuoto=randomBox;
+}
+
+return matrice;
+ 
+ }
+ 
+ // qui salvo la matrice mischiata. 
+ //per adesso prova a finire l'esercizio qui e a vedere se riesco a scambiare il contenuto dei bottoni
+ //questa è una funzione mia.in cui faccio lo shuffle degli elemetni nella tabella.
+ 
+
+ /*questa funzione mischiatabellagioco non è piu in uso*/
+ function mischiatabellagioco(){
+  var matrice = mischiaMatrice();
+    let k=0;
+ for(let i=0; i<4; i++){
+    
+	
+	
+	for(let j=0; j<4;j++){
+	   let valore=matrice[j][i];
+	   if(valore===0)
+	   {
+	    valore="";
+	   }
+	   document.getElementsByName("btngioco")[k].innerHTML = valore ;
+	   k++;
+	   
+	}
+	
+ }
+ 
+ }
+ 
+ function myFunction() {
+   
+   document.getElementsByName("btngioco")[10].innerHTML =1234;
+ 
+ }
+//questo è un costruttore che mi dice lo stato del gioco,
+//La griglia attuale, che ad ogni mossa deve aggiornarsi
+// 
+ class StatoGioco {
+ constructor(stato, grid, mosse){
+  this.stato=stato;
+  this.grid = grid;
+  this.mosse=mosse;
+ }
+ 
+ static CreaPartita(){
+  var matrix=mischiaMatrice();
+  console.log([...matrix]);
+  return new StatoGioco("partita",matrix,0);
+  
+  
+  
+ }
+ 
+ 
+ 
+ }
+ 
+ 
+ //Adesso a parte faccio tutta la logica del gioco, il gioco deve avere solo uno stato per adesso.
+ 
+ class Gioco {
+ //stato gioco glielo passo da creaPartita come oggetto
+ constructor(statoGioco){ 
+  this.statoGioco=statoGioco;
+  }
+  
+  
+  
+  gestisciClickSulNumero(box){
+ 
+ return function() {  
+  const boxVicini=box.posizioneBoxVicini(); // boxVicini è un array di box
+  
+  const boxVuoto=boxVicini.find(box => this.statoGioco.grid[box.y][box.x]===0 );
+//se hai trovato un boxvuoto tra i box vicini
+  if(boxVuoto){
+      
+	  
+       // fai lo swap di box cliccato con box 
+	   // creaun nuovo grid ma con i box swappati
+	  
+      this.statoGioco.mosse+=1;
+	  
+	  const nuovaMatrice = [...this.statoGioco.grid]; // i tre puntini restituiscono il contenuto del grid
+	   scambiaScatole(nuovaMatrice,box,boxVuoto); //nuovaMatrice ha la matrice con i box scambiati
+	   if(controllaRisultato(nuovaMatrice)){
+	     this.statoGioco.stato="vinto";
+		 this.renderMatrice();
+	   
+	   }
+	   else {
+	     
+		 this.statoGioco.stato="partita";
+		 this.statoGioco.grid=nuovaMatrice;
+		 this.renderMatrice();
+		 
+		 
+	   }
+  
+     }
+ 
+ 
+ }.bind(this);
+ 
+  }
+  
+ 
+ 
+ //questa funzione in teoria dovrebbe creare una nuova matrice 
+ //con queste righe di codice dato uno state dovrei ottenere un nuovo grid 
+ 
+ renderMatrice(){
+ 
+ 
+ const statoGioco=this.statoGioco.stato;
+ 
+ const grid = this.statoGioco.grid;
+ 
+ var mosse=this.statoGioco.mosse;  // in questa variabile c'è il numero di mosse , ogni click incrementa di uno e il gioco si aggiorna
+ 
+ const newGrid = document.createElement("div");
+ 
+ newGrid.className = "grid"; 
+ 
+ 
+
+  for (let i = 0; i < 4; i++) {  
+      for (let j = 0; j < 4; j++) {  
+        const button = document.createElement("button");  
+  
+        if (statoGioco === "partita") {  
+          button.addEventListener("click", this.gestisciClickSulNumero(new Box(i, j))); //il metodo restituito è bind con l'oggetto bottone 
+        }  
+  
+        button.textContent = grid[j][i] === 0 ? "" : grid[j][i].toString();  
+        newGrid.appendChild(button);  
+      }  
+    }  
+      
+	   
+      
+       document.querySelector(".grid").replaceWith(newGrid); 
+	   
+	   // console.log([...grid]);
+	   
+	   //aggiorno numero mosse: 
+	    document.getElementById("Nmosse").innerHTML= `Mosse: ${mosse}`;
+	   
+	   if(statoGioco==="vinto"){
+	      
+		  document.getElementById("messaggio").innerHTML  = `HAI VINTO IN ${mosse} MOSSE!!` ;  
+		  
+	   }
+	   
+   
+ }
+ 
+ //restituisco una funzione che sara l'andler del click del gioco.
+ 
+ 
+ }
+ 
+
+ function vinci(){
+  
+   document.getElementById("messaggio").innerHTML = `HAI VINTO IN poche MOSSE!!` ;
+
+   
+ 
+ 
+} 
+
+
+
+//partita.renderMatrice();
+
+
+function faiPartireStaMerda(){
+   const partita = new Gioco(StatoGioco.CreaPartita());
+   document.getElementById("messaggio").innerHTML="";
+   
+   partita.renderMatrice();
+   console.log(document.getElementById("matrice"));
+}
+
+
+
+
+</script>
+
+<!--
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+-->
+
+<style>
+html {
+    height: 100%;
+    display: grid;
+}
+
+
+ .grid { 
+  
+  display: grid;  
+  grid-template-columns: 80px 80px 80px 80px;  
+  grid-template-rows: 80px 80px 80px 80px;
+ 
+  column-gap: 2px;
+  row-gap: 2px;  
+  border-radius 50px;
+  
+
+  
+ // border: 1px solid #550000;  
+}  
+
+ .grid button {  
+  background-color: #90EE90;  
+   box-shadow: -2px 2px #32CD32, -2px 2px #32CD32, -1px 1px #32CD32;
+    border: 1px solid black;
+  
+  color: #003333;  
+  font-size: 24px;  
+  font-weight: bold;  
+  border: 1px solid #550000;  
+  outline: none;  
+  cursor: pointer; 
+  border-radius:15px; 
+ 
+ 
+   
+   
+} 
+
+.grid button:hover {  
+  color: #D4EE9F;  
+  background-color: #003333;  
+} 
+  
+
+
+.footer {  
+ position:relative;
+  margin-top: 10px;  
+  //display: flex;  
+  justify-content: space-between; 
+    
+}  
+
+.footer span {  
+  flex: 1;  
+  text-align: justify;  
+  font-size: 30px;  
+  color: #191970;  
+  font-weight: bold;  
+  margin-right: 20px;  
+  margin-top:20px;
+  border: 1px solid lime;
+  width:250px;
+  border-radius: 5px;
+  display:inline-block;
+  
+}
+
+.footer button {  
+  border: none;  
+  font-size: 20px;  
+  font-weight: bold;  
+  border-radius: 65px;  
+  box-shadow: 0 1px 4px rgba(10, 0, 0, 0.5);  
+  padding: 5px;  
+  width: 320px;  
+  background-color: #D4EE9F;  
+  color: #003333;  
+  outline: none;  
+  cursor: pointer; 
+  display:inline-block; 
+  margin-top:10px;  
+  margin-right:10px;
+}    
+
+#messaggio {
+  
+  color: Acquamarine;
+  position: relative;
+  height:100px;
+  width:800px;
+  animation-name: example;
+  animation-duration: 4s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease;
+}
+
+@keyframes example {
+  from {left: 500px; color:#00FFFF}
+  to {left: 0px; color:#483D8B}
+}
+}
+@viewport {
+zoom:1.0;
+width:extended-to-zoom;
+
+}
+
+@-ms-viewport{
+width:extended-to-zoom;
+zoom:1.0;
+}
+
+.contenitore{
+ width:90%; 
+	margin:auto;
+
+}
+
+</style>
+
+ <meta name="viewport" content="width=device-width, initial-scale=1 ">
+</head>
+ 
+<body style=" background-color:#6A5ACD" > 
+
+<div class="contenitore">
+
+<h1 style="text-shadow:1px 1px 0 #444; color:lime">Gioco del 15 </h1>
+ 
+  <div class="grid" id="matrice">  
+        <button name="btngioco">1</button>  
+        <button name="btngioco">2</button>  
+        <button name="btngioco">3</button>  
+        <button name="btngioco">4</button>  
+        <button name="btngioco">5</button>  
+        <button name="btngioco">6</button>  
+        <button name="btngioco">7</button>  
+        <button name="btngioco">8</button>  
+        <button name="btngioco">9</button>  
+        <button name="btngioco">10</button>  
+        <button name="btngioco">11</button>  
+        <button name="btngioco">12</button>  
+        <button name="btngioco">13</button>  
+        <button name="btngioco">14</button>  
+        <button name="btngioco">15</button>  
+        <button name="btngioco"></button>  
+      </div>  
+  
+  
+  <div class="footer"> 
+       <div id="messagio" > <h1 id="messaggio"></h1> </div>
+     
+       <div id="buttondiv">
+	      <button onclick="faiPartireStaMerda()">Play</button> 
+		 
+		 <!--
+		 <button onclick="vinci()">Vinci</button>  
+         -->
+
+	   </div>
+        
+        <span id="Nmosse">Mosse: </span>  
+        <!--
+		<span id="time">Time: 100</span>  
+		-->
+      </div>  
+ 
+ 
+ 
+ </div>
+ 
+</body>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

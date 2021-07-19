@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanoi Tower</title>
+    <link rel="stylesheet" href="stile.css">
+</head>
+<body>
+    <header>
+        <h1>Hanoi Blocks</h1>
+        <nav>
+            <div class="menu">
+            <p style="padding:5px">Difficoltà:</p>
+            <ul>
+                <li value="3">3</li>
+                <li value="4">4</li>
+                <li value="5">5</li>
+                <li value="6">6</li>
+                <li value="7">7</li>
+                <li value="8">8</li>
+
+            </ul>
+                <span><p>Punteggio</p><p class="punti"></p></span>
+
+            <div class="punteggio"></div>
+        </div>
+        </nav>
+    </header>
+    <main>
+
+        <div class="game">
+            <div id="start" class="start">
+               
+                </div>
+            <div id="aux" class="aux"></div>
+            <div  id="target" class="target"></div>
+        </div>
+
+
+    </main>
+   
+</body>
+<script>
+
+   let gameStatus= {start:0,aux:0,target:0}; //game status deve contenere informazioni su 1 il bottom, 2 quali elementi ci sono in ogni cella 
+   
+   let gameDivs= document.querySelectorAll(".game>div");
+   let btnsDifficolta=document.querySelectorAll("ul>li");
+   let start = document.querySelector('.start');
+   let aux = document.querySelector(".aux");
+   let target = document.querySelector(".target");
+    
+   window.addEventListener('mouseup',()=>{console.log("mouse rilasciato")});
+
+   btnsDifficolta.forEach(btn=>{
+       btn.addEventListener('click',function(){
+           this.value<9 && this.value>2 && creaBlocchi(this.value); // questo è un modo carino di fare un if
+       })
+   })
+  
+   function creaBlocchi(num){ // crea blocchi aggiunge i blocchi al riquadro start. Questi vengono creati uno alla volta da creaBlocco 
+         
+      removeAllChildNodes(start); // questa funzione rimuove tutti i blocchi da un parent!
+    
+      let h = Math.floor(Math.random()*360).toString(); //scelgo un colore e genero in modo random le tonalità
+
+
+     for(let i = 0 ; i < num ; i++){
+        let size = 90 - 10*i;
+        let  bottom= i*10;
+        let s = Math.floor(Math.random()*100).toString(); // qui scelgo la tonalità
+        let div = document.createElement('div');
+        div.classList.add('block');
+        div.style.bottom=`${bottom}%`;
+        div.style.width=`${size}%`;
+        div.value=`${num-i}`;
+        div.style.background="hsl("+h+","+s+"%,50%)";
+        div.innerText=div.value;
+       // div.draggable="true";
+        
+        
+      //  console.log(div);
+
+        start.appendChild(div);
+        
+      
+        
+
+     }
+
+     let blocchiStart = document.querySelectorAll(".start>div");
+     let numero = blocchiStart.length; // questo numero serve per sapere quale è l'altezza di start
+     gameStatus.start=numero; // gamestatus ad ogni movimento deve essere aggiornato.
+     bottom= `${numero}%`;
+     console.log(blocchiStart);
+     
+      
+   }
+
+
+ 
+
+
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
+   // una volta cliccato sul bottone, fai apparire nel div "start" il numero value di blocchi in forma piramidale e fai iniziare la partita
+   
+
+    let blocchetti = document.querySelectorAll(".start div");
+    blocchetti.forEach(element => {
+       // console.log(element,"altezza:"+ element.offsetHeight);
+        
+    });
+   
+    
+
+
+   //per adesso userò il drag e drop API per gestire lo spostamento di elementi da un blocco all' altro
+      let selectedBlock;
+      let startingDiv;
+
+   gameDivs.forEach(el=>{
+       el.addEventListener('mousedown',(e)=>{
+           let target = e.target;
+           selectedBlock=target;
+           let value= target.value;
+
+          let smallest= smallestBlock(el);
+          console.log("il più piccolo:"+smallest);
+
+          if(value<=smallest){
+              target.draggable="true";
+
+          }
+
+       })
+
+       
+
+       el.addEventListener('dragstart',(e)=>{
+        e.target.classList.add("dragging");  
+        //aggiorna gamestatus!!
+        console.log("evento drag start iniziato")
+        
+    });
+        
+     
+      el.addEventListener('dragend',e=>{
+        let divmosso = e.target;
+        divmosso.setAttribute('draggable', 'false'); 
+        divmosso.classList.remove("dragging"); 
+       // console.log("dragend triggered!!",e.target,returnBottomforcontainer(el));
+        let statoGioco = updateGameStatus(start,aux,target);
+        console.log("statogioco:::",statoGioco);
+    })
+
+    
+/*
+    el.addEventListener('dragover',e=>{
+       let draggingDiv= document.querySelector('.dragging');
+       //una funzione che appende il div in base al numero di blocchetti che ci sono già
+      // let bottom= returnBottomforcontainer(el)*10 + "%";
+       let bottom= returnBottomforcontainer(gameStatus,el)*10 + "%";
+       draggingDiv.style.bottom=bottom;
+       el.appendChild(draggingDiv);
+       //aggiorna lo status gioco
+        
+    })
+
+    */
+    let destination_container;
+
+    el.addEventListener('dragenter',e=>{
+        let draggingDiv= document.querySelector('.dragging');
+       //una funzione che appende il div in base al numero di blocchetti che ci sono già
+      // let bottom= returnBottomforcontainer(el)*10 + "%";
+       
+      if(el!=null){
+       let bottom= returnBottomforcontainer(gameStatus,el)*10 + "%";
+       draggingDiv.style.bottom=bottom;
+       el.appendChild(draggingDiv);
+        }
+       //aggiorna lo status gioco
+
+    })
+   })
+
+   function returnBottomforcontainer(gamestatus,container){
+       let containerName = container.id;
+       let numeroBlocchi = gamestatus[containerName];
+       console.log(numeroBlocchi);
+       return numeroBlocchi;
+    
+    //console.log("gamestatus=",gameStatus,"container=",container)
+
+   }
+   
+  function smallestBlock(container){  // questa funzione restituisce il div con il valore più piccolo.
+   // console.log(container.querySelectorAll("div"));
+    let divValues=container.querySelectorAll("div");
+    divValues= [...divValues];
+    divValues= divValues.map(el=>parseInt(el.value));
+    let smallest;
+    smallest =divValues.length>0?divValues.reduce(getSum, Number.MAX_VALUE):undefined;
+
+   function getSum(total, num) {
+  //console.log("totale:"+total,num)
+  if(num<total){
+    total=num;
+  }
+  return total
+}
+
+ return smallest;
+
+  }
+
+
+  function updateGameStatus(start,aux,target){
+      let blockCount_start= start.querySelectorAll(".block")==null?0:start.querySelectorAll(".block").length;
+      let blockCount_aux=aux.querySelectorAll(".block")==null?0:aux.querySelectorAll(".block").length;
+      let blockCount_target=target.querySelectorAll(".block")==null?0:target.querySelectorAll(".block").length;
+
+      console.log("status sezioni gioco:",blockCount_start,blockCount_target,blockCount_aux)
+
+       gameStatus.start=blockCount_start;
+       gameStatus.aux=blockCount_aux;
+       gameStatus.target=blockCount_target;
+
+       return gameStatus;
+      
+      
+  }
+
+  /*quello che ho fatto oggi: quando clicco su un blocco controllo se è quello più piccolo, se è quello più piccolo
+  faccio diventare draggable = "true" altrimenti lo lascio. 
+  Qeullo da fare è : una volta che ho lasciato il mouse voglio che tutti gli elementi venga rimossa la proprietà draggable="true"
+  controllare se nel div di destinazione è l'elemento più piccolo, se è l'elemento più piccolo piazzalo in quel div
+  */
+
+</script>
+</html>

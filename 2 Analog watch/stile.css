@@ -1,0 +1,86 @@
+:root {
+--dimensione-orologio:500px	
+	
+}
+
+main {
+background-color:red;
+max-width:800px;
+margin:auto;
+
+
+
+
+}
+
+.watch{
+	width:var(--dimensione-orologio);
+	height:var(--dimensione-orologio);
+	margin:auto;
+	border-radius:50%;
+	background-color:green;
+	//border: 4px solid blue;
+    position:absolute;
+	
+	
+     
+		
+}
+.centro { 
+  position:absolute;
+  
+  left:50%;
+  bottom:50%;
+  width:10px;
+  height:10px;
+  margin: -4px 0 0 -5px;
+  border-radius:50%;
+  background-color:pink;
+  
+  z-index:100000;
+
+}
+
+
+
+.lancetta {
+    position:absolute;
+	
+	left:50%;
+	bottom:50%;
+	width:4px;
+	//height:40%;
+	
+	
+	margin-left:-2px;
+	//margin-right:-2px;
+	//margin-top:10%;
+	
+	transition: transform linear;
+	
+    transform-origin: bottom;
+}
+
+#ore{
+	height:30%;
+	margin-top:20%;
+	background-color:blue;
+	
+	z-index:1000;
+}
+
+#minuti{
+	height:40%;
+	margin-top:10%;
+	background-color:gray;
+	
+	z-index:100;
+}
+#secondi{
+	height:45%;
+	margin-top:5%;
+	background-color:magenta;
+	
+	z-index:50;
+}
+

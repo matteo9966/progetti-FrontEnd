@@ -1,0 +1,152 @@
+
+:root{
+    --deskSizeTable : 600px;
+    --blockSize : 200px;
+    --menuSize:200px;
+}
+
+*{box-sizing: border-box;}
+
+body{
+    margin:0px;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+
+}
+
+
+
+header{
+    background-color: orange;
+    height: 100px;
+    text-align: center;
+
+}
+
+main{
+    display:flex;
+   overflow: scroll;
+   justify-content: center;
+   margin-top: 50px;
+
+}
+
+.container{
+    display: grid;
+    width: 800px;
+    max-height: 600px;
+    grid-template-areas: "talpe menu";
+                         
+     
+    grid-template-rows: var(--deskSizeTable) ;
+    grid-template-columns: var(--deskSizeTable) var(--menuSize);
+}
+
+ .talpe {
+     display: grid;
+     width: var(--deskSizeTable);
+     height: var(--deskSizeTable);
+      grid-template-areas:     "a b c"
+                               "d e f"
+                               "g h i" ;
+     grid-template-columns: repeat(3, var(--blockSize));
+     grid-template-rows:  repeat(3, var(--blockSize));
+     
+ }
+
+.buca {
+    position: relative;
+    
+    overflow: hidden;
+    
+    
+}
+
+/* .buca >img { 
+position: relative;
+height:50%;
+min-width: 100%;
+
+top:100px;
+display:flex;
+justify-self: center;
+background-color: cyan;
+/* background-color: chartreuse; 
+} */
+
+img[src^="basket"]{
+    position: relative;
+    max-height:80px;
+    width: 100%;
+    top:0px;
+    z-index: 1;
+    /* background-color: cyan; */
+    top:130px;
+}
+
+.talpa{
+    position: relative;
+    /* z-index: -1; */
+    padding: 0px;
+    
+    max-width: 100%;
+    max-height: 100%;
+    
+    /* background-color: red; */
+}
+
+img[src^="doge"]{
+    position: relative;
+
+display: flex;
+padding: 0px;
+top:52px; /* per farlo comparire: top:-80px;   */
+width:90%;
+height:90%;
+/* z-index: ; */
+transition: top 0.1s ease-out;
+
+
+justify-self: center;
+/* background-color: blue; */
+
+
+
+}
+
+.menu{
+    background-color:palevioletred ;
+    display: flex;
+    flex-direction: column;
+    font-family:Courier New;
+    padding-left: 10px;
+    padding-top: 50px;
+
+}
+
+.menu>.menuDifficolta{
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    padding-top: 100px;
+    
+}
+
+.menuDifficolta * {
+    margin-top: 10px;
+}
+
+.play{
+    margin:20px;
+    padding:5px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.punti {
+    display: inline;
+    width: 50px;
+    height: 32px;
+}

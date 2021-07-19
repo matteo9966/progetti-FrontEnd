@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<!-- Progetto finito manca solo da abbellirlo un po -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="stile.css">
+    <title>Document</title>
+</head>
+<body>
+    
+   <div class="container">
+       <section class="timedisplay">
+           <h1 class="timerfont">
+
+           00:00:00</h1>
+           <h2>
+           Torna alle:
+           </h2>
+           <h3>
+           
+
+           </h3>
+       </section>
+       <section class="menu">
+           <div class="buttonsection">
+            <button class="buttonfont" value=-5>-5</button>
+            <button class="buttonfont" value=-1>-1</button>
+            <div class="minuti">
+                <p>minuti:</p>
+                <input type="text" name="" id="">
+            </div>
+            
+            <button class="buttonfont" value=1>+1</button>
+            <button class="buttonfont" value=5>+5</button>
+        </div>
+           <div class="startEreset">
+               <button class="buttonfont" id="start">Start</button><button class="buttonfont" id="reset">Reset</button>
+           </div>
+       </section>
+   </div>
+    
+</body>
+<script>
+
+    let bottoniMinuti = document.querySelectorAll('.buttonsection>button');
+    let minutiTotali = document.querySelector('.minuti>input');
+    let startbtn= document.querySelector('#start');
+    let resetbtn= document.querySelector('#reset');
+    let tempoSulDisplay = document.querySelector('.timedisplay>h1');
+    let tornaAlle=  document.querySelector('.timedisplay>h3');
+
+
+
+    let tempoTotale = "0" ;
+    let tempoRimanente;
+    let id;
+    let contatoreAvviato = false ;
+    minutiTotali.value=tempoTotale;
+    
+
+ ///la funzione countdown prende un valore che moltiplicato pper multiplier deve restituire un valore in millisecondi
+    function countdown(secs){
+           let adesso = Date.now();
+           let tempoFinale = adesso + secs; //tempo finale è scritto in millisecondi// questo è l'istante in cui deve scadere il tempo.
+           
+           console.log(convertiInFormatoHHMMSS(Math.round(secs/1000)));
+           displayTime(convertiInFormatoHHMMSS(Math.round(secs/1000)));
+            
+           id = setInterval(()=>{
+            tempoRimanente= tempoFinale- Date.now(); 
+            
+            if(tempoRimanente<0){
+                console.log("TempoScaduto!!!");
+                startbtn.innerText="Start";
+                clearInterval(id);
+                return
+            }
+
+            console.log( convertiInFormatoHHMMSS( Math.round(tempoRimanente/1000)));
+            displayTime(convertiInFormatoHHMMSS( Math.round(tempoRimanente/1000)));
+
+        },1000);
+
+    }
+
+        //una funzione che calcola HH:MM:SS del tempo rimanente:
+
+        function convertiInFormatoHHMMSS(val){
+            
+            let hours = Math.floor(val/3600).toString().padStart(2, 0);
+            let mins = Math.floor((val-hours*3600)/60).toString().padStart(2, 0);
+            let seconds = (val - hours*3600 - mins*60).toString().padStart(2, 0);
+
+            return {hours,mins,seconds};
+
+
+
+        }
+       
+        // questa funzione viene chiamata solo per aggiornare il tempo visualizzato sullo schermo|
+        function displayTime(objTime){
+
+            tempoSulDisplay.innerText = `${objTime.hours}:${objTime.mins}:${objTime.seconds}`;
+
+        }
+
+
+   
+   function modificaTempo(){
+    
+    let addtempo= parseInt(this.value);
+
+    let temponuovo = parseInt(minutiTotali.value) + addtempo;
+
+     if(temponuovo<0){
+         return
+     }
+      tempoTotale = temponuovo;
+
+      minutiTotali.value=tempoTotale;
+
+      
+
+
+   }
+
+   function faiPartireilContatore(){
+    
+    if(contatoreAvviato){
+          
+        if(this.innerText=="Pausa"){
+        this.innerText="Start"; 
+        clearInterval(id);
+
+        console.log(tempoRimanente);
+       
+
+        return
+      }
+
+     
+
+      //se il contatore è avviato devo passargli il valore che viene salvato in millisecondi quando premo pausa 
+      //altrimenti se il contatore non è avviato metti contatoreAvviato=true e setti il tempo.
+
+      countdown(tempoRimanente);
+      let orario =  new Date(Date.now()+tempoRimanente); 
+      tornaAlle.innerText= (orario.getHours()) + ":" + (orario.getMinutes()) + ":" + (orario.getSeconds()); 
+      this.innerText="Pausa";
+      
+      return
+    }
+
+    if(tempoTotale<=0){
+          return
+      }
+    
+      console.log(tempoTotale);
+
+     countdown(tempoTotale*60000);
+     
+     let orario=  new Date(Date.now()+tempoTotale*60000); 
+      tornaAlle.innerText= (orario.getHours()) + ":" + (orario.getMinutes()) + ":" + (orario.getSeconds()); 
+     contatoreAvviato=true;
+    
+    this.innerText="Pausa";
+    minutiTotali.value="0";
+
+    
+
+
+     
+
+
+   }
+
+
+
+
+
+   bottoniMinuti.forEach(btn=>{btn.addEventListener('click',modificaTempo)});
+   startbtn.addEventListener('click',faiPartireilContatore);
+   resetbtn.addEventListener('click',()=>{
+       minutiTotali.value="0";
+       clearInterval(id);
+       contatoreAvviato=false;
+       startbtn.innerText="Start";
+       tempoSulDisplay.textContent="00:00:00";
+       tempoTotale=0;
+
+   });
+   
+           
+
+
+
+
+  
+
+</script>
+</html>

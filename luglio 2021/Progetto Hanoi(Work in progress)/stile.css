@@ -1,0 +1,172 @@
+*, *::before *::after {
+    box-sizing: border-box;
+
+}
+
+:root{
+    --fontsize:2rem;
+}
+
+html {
+    margin:0;
+    padding:0;
+    font-size: 0.7rem;
+}
+
+h1{
+    font-size: 3rem;
+}
+
+body{
+    margin:0;
+    padding: 0;
+    display:flex;
+    flex-direction: column;
+    height:100vh;
+    overflow: hidden;
+
+}
+
+header {
+    width: 100%;
+    
+    background: chartreuse;
+}
+
+main{
+    width: 100%;
+    
+    flex-grow: 4;
+    background: cadetblue;
+}
+nav{
+    border:1px solid;
+    /* padding-left: 30%;
+    padding-right: 20%; */
+    display: flex;
+    background-color: maroon;
+    
+}
+
+.menu {
+    width: 100%;
+    display: flex;
+}
+
+@media screen and (max-width:560px) {
+    .menu{
+        flex-direction: column;
+    }
+
+    
+}
+
+ul{
+    display:flex;
+    
+    margin:0px;
+    height:5rem;
+    width:100%;
+    padding:0;
+    /* justify-content: flex-end; */
+    background: coral;
+    font-size:var(--fontsize);
+}
+
+@media screen and (max-width:560px) {
+    ul{
+        display:flex;
+        
+        margin:0px;
+        height:5rem;
+        width:100%;
+        padding:0;
+        justify-content: flex-start;
+        background: coral;
+        font-size:var(--fontsize);
+    }
+    
+    
+}
+
+ul>li{
+    display:inline;
+    height:100%;
+    flex:1;
+    margin-left:0px;
+    border: 1px solid indigo;
+    text-align: center;
+    
+}
+
+/* nav>p{
+    font-size: var(--fontsize);
+    background: red;
+    
+    margin:0;} */
+
+    .game{
+        margin-top:2%;
+        width:80%;
+        height:90%;
+        border:1px solid;
+        margin-left:auto;
+        margin-right:auto;
+        display: flex;
+
+    }
+
+    .game>div{
+      display: flex;
+      justify-content: center;
+      border: 1px solid;
+      flex:1;
+      position:relative;
+    }
+
+  .start div:nth-child(1){
+    width:80%;
+    height:10%;
+    background: crimson;
+    align-self: center;
+
+    position:absolute;
+    bottom:0;
+  }
+
+  .start div:nth-child(2){
+    width:60%;
+    height:10%;
+    background: rgb(73, 20, 220);
+    align-self: center;
+
+    position:absolute;
+    bottom:10%;
+  }
+
+  .block {
+
+    height:10%;
+    background: crimson;
+    align-self: center;
+    position:absolute;
+  }
+  
+
+
+  nav>div>ul>li:hover{
+      background-color: gold;
+  }
+
+  span{
+      margin-left:2%;
+      display: flex;
+      border:1px solid;
+      font-size: 1.5rem;
+      
+  }
+  .punti{
+      font-size:2rem;
+      min-width:80px;
+      
+  }

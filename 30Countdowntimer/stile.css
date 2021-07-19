@@ -1,0 +1,116 @@
+*, *::before,*::after{
+    box-sizing: border-box;
+}
+
+:root{
+    --timer-font:3rem;
+    --timer-date-font:2rem;
+    --button-font:1rem;
+    --input-font:1.25rem;
+}
+
+html {
+    font-size: 18px;
+    display: flex;
+    
+    background-color: #66ffff;
+}
+
+body {
+    
+    display: flex;
+    width: 100%;
+    margin: 0;
+   justify-content: center;
+    align-items: center;
+}
+
+
+
+
+.container{
+   margin-top: 1rem;
+    display: flex;
+    min-width:90%; 
+    background-color: linear-gradient(to right, #66ffff 0%, #9933ff 100%);
+    
+    /* min-width: 260px; */
+
+   
+
+}
+
+section{
+    display: block;
+    border:  1px solid black;
+    padding:1rem;
+    flex:1;
+    text-align: center;
+}
+
+
+.timerfont{
+    font-family:'Courier New';
+    font-size: var(--timer-font);
+    flex:1;
+}
+
+.buttonfont{
+    position: relative;
+    font-family: 'Courier New', Courier, monospace;
+    font-size:  var(--button-font);
+    font-weight: bold;
+    
+    height: min-content;
+
+    
+}
+
+.buttonsection{
+    display: flex;
+    justify-content: center;
+    
+}
+
+.buttonsection>* {
+    margin:0.5rem;
+    margin-top:3rem;
+}
+
+.minuti {
+    text-align: center;
+    position: relative;
+    top:-4rem;
+}
+
+.minuti > input[type="text"] {
+    width: 5rem;
+    height: 3rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: right;
+}
+
+.startEreset {
+    display:flex;
+    justify-content: space-evenly;
+
+}
+
+/* .startEreset > * {
+    
+} */
+
+
+@media screen and (max-width:700px) {
+    html{
+        font-size:15px;
+    }
+
+    .container{
+        flex-direction: column;
+    }
+
+        
+}

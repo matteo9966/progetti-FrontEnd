@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D per altre informazioni su canvas
+-->
+<html>
+    <head>
+
+    </head>
+ <body>
+   <canvas height="800px" width="800px" style="border:1px solid red;" id="canv"></canvas>
+
+
+
+ </body>
+
+<script>
+let canvas = document.querySelector("#canv");
+let ctx  = canvas.getContext('2d');
+console.log(ctx);
+//ctx.strokeStyle="blue";
+ctx.lineJoin ="round";
+ctx.lineCap ="round";
+ctx.lineWidth =12;
+let isDrawing = false ;
+let X =0 ; 
+let Y =0 ;
+
+function disegnando(e) { 
+   isDrawing = true;
+   X = e.offsetX;
+   Y= e.offsetY;
+   isDrawing = true ; 
+  // console.log(X,Y,isDrawing);
+    
+}
+
+function smessodiDisegnare(e) {
+    if(isDrawing){
+
+        isDrawing=false;
+    }
+}
+
+function disegna(x1,y1) {
+   if(isDrawing === true) {
+     
+    let colorvalue = (X + Y) % 361 ;
+    console.log(colorvalue);
+    
+    ctx.beginPath();
+       ctx.moveTo(X,Y);
+       ctx.lineTo(x1,y1);
+       
+       ctx.strokeStyle = `hsl(${colorvalue}, 99%, 50%) `;
+       ctx.stroke();
+       ctx.closePath();
+   }
+
+}
+
+function cambiaposizione(e) {
+   // console.log(e.offsetX, e.offsetY);
+    if(isDrawing === true) {
+       disegna(e.offsetX, e.offsetY);
+       X = e.offsetX;
+       Y = e.offsetY;
+
+    }
+
+}
+
+canvas.addEventListener('mousedown',disegnando);
+canvas.addEventListener('mouseup',smessodiDisegnare);
+canvas.addEventListener('mousemove',cambiaposizione);
+
+</script>
+
+
+</html>
